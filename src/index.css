@@ -369,11 +369,15 @@ textarea.g-input {
   padding: 1rem;
   border-radius: 0.75rem;
   border: 1px solid rgba(255, 255, 255, 0.03);
-  transition: background 0.2s;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: default;
 }
 
 .ticket-row:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-3px) scale(1.005);
+  border-color: rgba(139, 92, 246, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(139, 92, 246, 0.08);
 }
 
 /* ─── Issue Row (in form) ───────────────────────────────────────────── */
@@ -490,8 +494,20 @@ textarea.g-input {
   vertical-align: top;
 }
 
-.tracker-table tr:hover td {
-  background: rgba(255, 255, 255, 0.02);
+.tracker-table tbody tr {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tracker-table tbody tr:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 2;
+}
+
+.tracker-table tbody tr:hover td {
+  background: rgba(139, 92, 246, 0.06);
+  border-bottom-color: rgba(139, 92, 246, 0.12);
 }
 
 /* ─── Spinner ───────────────────────────────────────────────────────── */

@@ -109,16 +109,30 @@ function Dashboard({ issues, onStatusChange, onResolve }) {
   const [resolveModal, setResolveModal] = useState(null);
   const [resolveNotes, setResolveNotes] = useState('');
   const [activeFilter, setActiveFilter] = useState('Needs Attention');
+  const [search, setSearch] = useState('');
+
+  const matchesSearch = (issue) => {
+    if (!search) return true;
+    const q = search.toLowerCase();
+    return (
+      (issue['Employee Name'] || '').toLowerCase().includes(q) ||
+      (issue['Ticket ID'] || '').toLowerCase().includes(q) ||
+      (issue['Screening ID'] || '').toLowerCase().includes(q) ||
+      (issue.Description || '').toLowerCase().includes(q)
+    );
+  };
 
   const getFilteredIssues = () => {
+    let result;
     switch (activeFilter) {
-      case 'Total Tickets': return issues;
-      case 'Red': return issues.filter(i => i['Flag Level'] === 'Red');
-      case 'Yellow': return issues.filter(i => i['Flag Level'] === 'Yellow');
-      case 'Open': return issues.filter(i => i.Status === 'Open');
-      case 'Resolved': return issues.filter(i => i.Status === 'Resolved');
-      default: return issues.filter(i => i.Status !== 'Resolved');
+      case 'Total Tickets': result = issues; break;
+      case 'Red': result = issues.filter(i => i['Flag Level'] === 'Red'); break;
+      case 'Yellow': result = issues.filter(i => i['Flag Level'] === 'Yellow'); break;
+      case 'Open': result = issues.filter(i => i.Status === 'Open'); break;
+      case 'Resolved': result = issues.filter(i => i.Status === 'Resolved'); break;
+      default: result = issues.filter(i => i.Status !== 'Resolved');
     }
+    return result.filter(matchesSearch);
   };
 
   const displayIssues = getFilteredIssues();
@@ -134,7 +148,14 @@ function Dashboard({ issues, onStatusChange, onResolve }) {
       </div>
 
       <div className="glass" style={{ padding: '1.25rem' }}>
-        <h2 style={{ fontSize: '1.125rem', fontWeight: 700, marginBottom: '1rem' }}>⚡ {activeFilter === 'Needs Attention' ? 'Open Issues (Needs Attention)' : activeFilter + ' Issues'}</h2>
+        <div className="flex-between" style={{ marginBottom: '1rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+          <h2 style={{ fontSize: '1.125rem', fontWeight: 700 }}>⚡ {activeFilter === 'Needs Attention' ? 'Open Issues (Needs Attention)' : activeFilter + ' Issues'} <span style={{ fontSize: '0.8125rem', fontWeight: 400, color: 'var(--text-muted)' }}>({displayIssues.length})</span></h2>
+          <div style={{ position: 'relative', minWidth: '240px', maxWidth: '320px', flex: '0 1 320px' }}>
+            <input className="g-input" style={{ paddingLeft: '2.25rem', fontSize: '0.8125rem' }} value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name, ticket ID, description..." />
+            <span style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', fontSize: '0.875rem', pointerEvents: 'none' }}>🔍</span>
+            {search && <button type="button" onClick={() => setSearch('')} style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '0.75rem' }}>✕</button>}
+          </div>
+        </div>
         <div className="space-y-sm">
           {displayIssues.length === 0 && <p style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '2rem' }}>🎉 No issues found for this filter!</p>}
           {displayIssues.slice(0, 20).map(issue => (
@@ -418,24 +439,41 @@ function IssueTracker({ issues, onStatusChange, onResolve }) {
   const [flagFilter, setFlagFilter] = useState('');
   const [resolveModal, setResolveModal] = useState(null);
   const [resolveNotes, setResolveNotes] = useState('');
+  const [search, setSearch] = useState('');
 
   const filtered = issues.filter(i => {
     if (statusFilter && i.Status !== statusFilter) return false;
     if (flagFilter && i['Flag Level'] !== flagFilter) return false;
+    if (search) {
+      const q = search.toLowerCase();
+      const match =
+        (i['Employee Name'] || '').toLowerCase().includes(q) ||
+        (i['Ticket ID'] || '').toLowerCase().includes(q) ||
+        (i['Screening ID'] || '').toLowerCase().includes(q) ||
+        (i.Description || '').toLowerCase().includes(q);
+      if (!match) return false;
+    }
     return true;
   });
 
   return (
     <div className="space-y">
-      <div className="flex-gap">
-        <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 500 }}>Filter:</span>
-        {['', 'Open', 'In Progress', 'Resolved'].map(s => (
-          <button key={s} className={`pill ${statusFilter === s ? 'active' : ''}`} onClick={() => setStatusFilter(s)}>{s || 'All'}</button>
-        ))}
-        <span style={{ margin: '0 0.25rem', color: 'rgba(255,255,255,0.1)' }}>|</span>
-        {['', 'Red', 'Yellow', 'Green'].map(f => (
-          <button key={f} className={`pill ${flagFilter === f ? 'active' : ''}`} onClick={() => setFlagFilter(f)}>{f ? (f === 'Red' ? '🔴' : f === 'Yellow' ? '🟡' : '🟢') : 'All Flags'}</button>
-        ))}
+      <div className="flex-between" style={{ flexWrap: 'wrap', gap: '0.75rem' }}>
+        <div className="flex-gap">
+          <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 500 }}>Filter:</span>
+          {['', 'Open', 'In Progress', 'Resolved'].map(s => (
+            <button key={s} className={`pill ${statusFilter === s ? 'active' : ''}`} onClick={() => setStatusFilter(s)}>{s || 'All'}</button>
+          ))}
+          <span style={{ margin: '0 0.25rem', color: 'rgba(255,255,255,0.1)' }}>|</span>
+          {['', 'Red', 'Yellow', 'Green'].map(f => (
+            <button key={f} className={`pill ${flagFilter === f ? 'active' : ''}`} onClick={() => setFlagFilter(f)}>{f ? (f === 'Red' ? '🔴' : f === 'Yellow' ? '🟡' : '🟢') : 'All Flags'}</button>
+          ))}
+        </div>
+        <div style={{ position: 'relative', minWidth: '220px', maxWidth: '300px', flex: '0 1 300px' }}>
+          <input className="g-input" style={{ paddingLeft: '2.25rem', fontSize: '0.8125rem' }} value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name, ticket, description..." />
+          <span style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', fontSize: '0.875rem', pointerEvents: 'none' }}>🔍</span>
+          {search && <button type="button" onClick={() => setSearch('')} style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '0.75rem' }}>✕</button>}
+        </div>
       </div>
 
       <div className="glass" style={{ padding: '1rem', overflowX: 'auto' }}>
