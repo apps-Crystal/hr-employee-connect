@@ -5,8 +5,8 @@ import { getDashboard, submitWeek1, submitWeek234, addIssues, updateStatus } fro
 // ─── FLAG TOOLTIPS ──────────────────────────────────────────────────
 const FLAG_TOOLTIPS = {
   Red: '🔴 Critical — Employee cannot perform job / at risk of leaving. Requires immediate HR intervention.',
-  Yellow: '🟡 At-Risk — Productivity blocked or benefits pending. Needs follow-up within 48 hours.',
-  Green: '🟢 Smooth — No issues reported. Onboarding is on track.'
+  Orange: '🟠 At-Risk — Productivity blocked or benefits pending. Needs follow-up within 48 hours.',
+  Yellow: '🟡 Monitoring — Minor concerns noted. Employee adjusting, may need support if situation persists.'
 };
 const getFlagTooltip = (flag) => FLAG_TOOLTIPS[flag] || '';
 
@@ -159,25 +159,27 @@ function Dashboard({ issues, onStatusChange, onResolve }) {
         <div className="space-y-sm">
           {displayIssues.length === 0 && <p style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '2rem' }}>🎉 No issues found for this filter!</p>}
           {displayIssues.slice(0, 20).map(issue => (
-            <div key={issue['Ticket ID']} className="ticket-row flex-between" style={{ flexWrap: 'wrap', gap: '0.75rem' }}>
-              <div style={{ flex: 1, minWidth: '200px' }}>
+            <div key={issue['Ticket ID']} className="ticket-row" style={{ display: 'grid', gridTemplateColumns: '1fr auto auto', gap: '1rem', alignItems: 'start' }}>
+              <div style={{ minWidth: 0 }}>
                 <div className="flex-gap" style={{ marginBottom: '0.25rem' }}>
                   <span style={{ fontSize: '0.8125rem', fontFamily: 'monospace', color: 'var(--purple-400)' }}>{issue['Ticket ID']}</span>
-                  <span className={`badge badge-${issue['Flag Level'] === 'Red' ? 'red' : 'yellow'}`} title={getFlagTooltip(issue['Flag Level'])}>{issue['Flag Level']}</span>
+                  <span className={`badge badge-${issue['Flag Level'] === 'Red' ? 'red' : issue['Flag Level'] === 'Orange' ? 'orange' : 'yellow'}`} title={getFlagTooltip(issue['Flag Level'])}>{issue['Flag Level']}</span>
                   <span className={`badge ${issue.Type === 'Issue' ? 'badge-red' : 'badge-blue'}`}>{issue.Type}</span>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginLeft: 'auto' }}>{formatShortDate(issue['Date Raised'])}</span>
                 </div>
                 <p style={{ fontSize: '0.9375rem', fontWeight: 600 }}>{issue['Employee Name']}</p>
                 <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '0.375rem', lineHeight: 1.5 }}>{issue.Description}</p>
               </div>
-              <div className="flex-gap">
+              <div style={{ textAlign: 'right', whiteSpace: 'nowrap', paddingTop: '0.125rem' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{formatShortDate(issue['Date Raised'])}</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.375rem', minWidth: '130px', maxWidth: '280px' }}>
                 {issue.Status !== 'Resolved' ? (
                   <>
-                    <button className="btn btn-xs" style={{ background: 'rgba(250,204,21,0.2)', color: 'var(--yellow-400)' }} onClick={() => onStatusChange(issue['Ticket ID'], 'In Progress')}>🔄 In Progress</button>
-                    <button className="btn btn-xs" style={{ background: 'rgba(52,211,153,0.2)', color: 'var(--emerald-400)' }} onClick={() => { setResolveModal(issue); setResolveNotes(''); }}>✅ Resolve</button>
+                    <button className="btn btn-xs" style={{ background: 'rgba(250,204,21,0.2)', color: 'var(--yellow-400)', width: '100%' }} onClick={() => onStatusChange(issue['Ticket ID'], 'In Progress')}>🔄 In Progress</button>
+                    <button className="btn btn-xs" style={{ background: 'rgba(52,211,153,0.2)', color: 'var(--emerald-400)', width: '100%' }} onClick={() => { setResolveModal(issue); setResolveNotes(''); }}>✅ Resolve</button>
                   </>
                 ) : (
-                  <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>{issue['Resolution Notes'] || 'Resolved'}</span>
+                  <span style={{ fontSize: '0.8125rem', color: 'var(--emerald-400)', textAlign: 'right', lineHeight: 1.4 }}>{issue['Resolution Notes'] || 'Resolved'}</span>
                 )}
               </div>
             </div>
@@ -478,8 +480,8 @@ function IssueTracker({ issues, onStatusChange, onResolve }) {
             <button key={s} className={`pill ${statusFilter === s ? 'active' : ''}`} onClick={() => setStatusFilter(s)}>{s || 'All'}</button>
           ))}
           <span style={{ margin: '0 0.25rem', color: 'rgba(255,255,255,0.1)' }}>|</span>
-          {['', 'Red', 'Yellow', 'Green'].map(f => (
-            <button key={f} className={`pill ${flagFilter === f ? 'active' : ''}`} onClick={() => setFlagFilter(f)}>{f ? (f === 'Red' ? '🔴' : f === 'Yellow' ? '🟡' : '🟢') : 'All Flags'}</button>
+          {['', 'Red', 'Orange', 'Yellow'].map(f => (
+            <button key={f} className={`pill ${flagFilter === f ? 'active' : ''}`} onClick={() => setFlagFilter(f)}>{f ? (f === 'Red' ? '🔴' : f === 'Orange' ? '🟠' : '🟡') : 'All Flags'}</button>
           ))}
         </div>
         <div style={{ position: 'relative', minWidth: '220px', maxWidth: '300px', flex: '0 1 300px' }}>
@@ -506,7 +508,7 @@ function IssueTracker({ issues, onStatusChange, onResolve }) {
                 <td><span style={{ fontSize: '0.875rem' }}>{issue['Employee Name']}</span><br /><span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{issue['Screening ID']}</span></td>
                 <td><span className={`badge ${issue.Type === 'Issue' ? 'badge-red' : 'badge-blue'}`}>{issue.Type}</span></td>
                 <td style={{ maxWidth: '240px', fontSize: '0.8125rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>{issue.Description}</td>
-                <td><span className={`badge badge-${issue['Flag Level'] === 'Red' ? 'red' : issue['Flag Level'] === 'Yellow' ? 'yellow' : 'green'}`} title={getFlagTooltip(issue['Flag Level'])}>{issue['Flag Level']}</span></td>
+                <td><span className={`badge badge-${issue['Flag Level'] === 'Red' ? 'red' : issue['Flag Level'] === 'Yellow' ? 'yellow' : 'orange'}`} title={getFlagTooltip(issue['Flag Level'])}>{issue['Flag Level']}</span></td>
                 <td style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>{issue['Action Owner'] || '—'}</td>
                 <td><span className={`badge ${issue.Status === 'Resolved' ? 'badge-green' : issue.Status === 'In Progress' ? 'badge-yellow' : 'badge-orange'}`}>{issue.Status}</span></td>
                 <td>
@@ -604,7 +606,7 @@ function RaiseIssue({ employees, onSubmit }) {
               <div>
                 <label className="label label-xs">Flag Level</label>
                 <select className="g-input" value={row.flagLevel} onChange={e => updateRow(idx, 'flagLevel', e.target.value)}>
-                  <option value="Red" title={FLAG_TOOLTIPS.Red}>🔴 Red — Critical</option><option value="Yellow" title={FLAG_TOOLTIPS.Yellow}>🟡 Yellow — At-Risk</option><option value="Green" title={FLAG_TOOLTIPS.Green}>🟢 Green — Smooth</option>
+                  <option value="Red" title={FLAG_TOOLTIPS.Red}>🔴 Red — Critical</option><option value="Orange" title={FLAG_TOOLTIPS.Orange}>🟠 Orange — At-Risk</option><option value="Yellow" title={FLAG_TOOLTIPS.Yellow}>🟡 Yellow — Monitoring</option>
                 </select>
               </div>
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'end' }}>
