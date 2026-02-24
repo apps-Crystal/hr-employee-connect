@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
+  /* ─── Colors ─────────────────────────────────────── */
   --bg-primary: #0f172a;
   --bg-secondary: #1e1b4b;
   --glass-bg: rgba(255, 255, 255, 0.05);
@@ -19,6 +20,39 @@
   --emerald-500: #10b981;
   --orange-400: #fb923c;
   --blue-400: #60a5fa;
+
+  /* ─── Typography Scale (Major Third 1.25) ────────── */
+  /* Base: 0.9375rem (15px) for dense dashboard UI     */
+  --fs-2xs: 0.75rem;
+  /* 12px — captions, timestamps */
+  --fs-xs: 0.8125rem;
+  /* 13px — badges, meta info    */
+  --fs-sm: 0.875rem;
+  /* 14px — body small, labels   */
+  --fs-base: 0.9375rem;
+  /* 15px — body text            */
+  --fs-md: 1rem;
+  /* 16px — emphasized body      */
+  --fs-lg: 1.125rem;
+  /* 18px — section headings     */
+  --fs-xl: 1.375rem;
+  /* 22px — page headings        */
+  --fs-2xl: 1.75rem;
+  /* 28px — title / hero         */
+  --fs-3xl: 2.25rem;
+  /* 36px — stat values          */
+
+  /* ─── Spacing ────────────────────────────────────── */
+  --space-xs: 0.25rem;
+  /* 4px  */
+  --space-sm: 0.5rem;
+  /* 8px  */
+  --space-md: 1rem;
+  /* 16px */
+  --space-lg: 1.5rem;
+  /* 24px */
+  --space-xl: 2rem;
+  /* 32px */
 }
 
 * {
@@ -29,6 +63,8 @@
 
 body {
   font-family: 'Outfit', sans-serif;
+  font-size: var(--fs-base);
+  line-height: 1.5;
   background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, #000 100%);
   color: var(--text-primary);
   min-height: 100vh;
@@ -59,9 +95,9 @@ body {
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: #fff;
-  padding: 0.75rem;
+  padding: 0.625rem 0.875rem;
   border-radius: 0.75rem;
-  font-size: 1rem;
+  font-size: var(--fs-sm);
   font-family: 'Outfit', sans-serif;
   transition: all 0.3s ease;
 }
@@ -95,7 +131,7 @@ textarea.g-input {
   padding: 0.625rem 1.25rem;
   border-radius: 0.75rem;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: var(--fs-sm);
   font-family: 'Outfit', sans-serif;
   cursor: pointer;
   border: none;
@@ -149,13 +185,13 @@ textarea.g-input {
 
 .btn-sm {
   padding: 0.375rem 0.75rem;
-  font-size: 0.75rem;
+  font-size: var(--fs-2xs);
   border-radius: 0.5rem;
 }
 
 .btn-xs {
   padding: 0.25rem 0.5rem;
-  font-size: 0.625rem;
+  font-size: var(--fs-2xs);
   border-radius: 0.375rem;
 }
 
@@ -234,11 +270,12 @@ textarea.g-input {
   border: none;
   color: var(--text-muted);
   font-family: 'Outfit', sans-serif;
-  font-size: 0.875rem;
-  padding: 0.5rem 0;
+  font-size: var(--fs-sm);
+  padding: 0.625rem 0;
   cursor: pointer;
   border-bottom: 3px solid transparent;
   transition: all 0.2s;
+  letter-spacing: 0.01em;
 }
 
 .nav-tab:hover {
@@ -254,7 +291,7 @@ textarea.g-input {
 /* ─── Stat Cards ────────────────────────────────────────────────────── */
 .stat-card {
   text-align: center;
-  padding: 1rem;
+  padding: 1.25rem 1rem;
 }
 
 .hover-card {
@@ -268,14 +305,17 @@ textarea.g-input {
 }
 
 .stat-value {
-  font-size: 1.5rem;
+  font-size: var(--fs-3xl);
   font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
 .stat-label {
-  font-size: 0.75rem;
+  font-size: var(--fs-xs);
   color: var(--text-muted);
-  margin-top: 0.25rem;
+  margin-top: 0.375rem;
+  letter-spacing: 0.02em;
 }
 
 /* ─── Badge/Tag ─────────────────────────────────────────────────────── */
@@ -283,12 +323,14 @@ textarea.g-input {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.125rem 0.625rem;
+  padding: 0.1875rem 0.625rem;
   border-radius: 9999px;
-  font-size: 0.625rem;
+  font-size: var(--fs-2xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  white-space: nowrap;
+  cursor: default;
 }
 
 .badge-red {
@@ -344,9 +386,9 @@ textarea.g-input {
 
 /* ─── Filter Pill Buttons ───────────────────────────────────────────── */
 .pill {
-  padding: 0.375rem 0.75rem;
+  padding: 0.375rem 0.875rem;
   border-radius: 9999px;
-  font-size: 0.75rem;
+  font-size: var(--fs-2xs);
   cursor: pointer;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: none;
@@ -397,7 +439,7 @@ textarea.g-input {
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: 0.75rem;
-  font-size: 0.875rem;
+  font-size: var(--fs-sm);
   font-weight: 500;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   z-index: 200;
@@ -428,20 +470,23 @@ textarea.g-input {
 .tracker-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.875rem;
+  font-size: var(--fs-sm);
 }
 
 .tracker-table th {
   text-align: left;
-  padding: 0.5rem;
-  font-size: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  font-size: var(--fs-2xs);
+  font-weight: 600;
   color: var(--text-muted);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .tracker-table td {
-  padding: 0.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 0.625rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   vertical-align: top;
 }
 
@@ -474,7 +519,7 @@ textarea.g-input {
   background: none;
   color: var(--text-muted);
   font-family: 'Outfit', sans-serif;
-  font-size: 0.75rem;
+  font-size: var(--fs-2xs);
   border-radius: 0.75rem;
   cursor: pointer;
   transition: all 0.2s;
@@ -502,18 +547,18 @@ textarea.g-input {
 /* ─── Form Label ────────────────────────────────────────────────────── */
 .label {
   display: block;
-  font-size: 0.85rem;
+  font-size: var(--fs-sm);
   color: var(--text-muted);
   margin-bottom: 0.25rem;
 }
 
 .label-xs {
-  font-size: 0.75rem;
+  font-size: var(--fs-2xs);
 }
 
 /* ─── Auto-fill Info Display ────────────────────────────────────────── */
 .info-value {
-  font-size: 1rem;
+  font-size: var(--fs-md);
   color: var(--text-primary);
   font-weight: 500;
 }

@@ -77,8 +77,8 @@ export default function App() {
       <header className="glass" style={{ padding: '1.25rem', marginBottom: '1.5rem' }}>
         <div className="flex-between">
           <div>
-            <h1 className="gradient-text" style={{ fontSize: '1.75rem', fontWeight: 700 }}>HR Employee Connect</h1>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '0.25rem' }}>Issue Tracking & Resolution System</p>
+            <h1 className="gradient-text" style={{ fontSize: '1.75rem', fontWeight: 700, letterSpacing: '-0.02em' }}>HR Employee Connect</h1>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.8125rem', marginTop: '0.25rem', letterSpacing: '0.01em' }}>Issue Tracking & Resolution System</p>
           </div>
         </div>
         <div className="nav-tabs">
@@ -141,13 +141,13 @@ function Dashboard({ issues, onStatusChange, onResolve }) {
             <div key={issue['Ticket ID']} className="ticket-row flex-between" style={{ flexWrap: 'wrap', gap: '0.75rem' }}>
               <div style={{ flex: 1, minWidth: '200px' }}>
                 <div className="flex-gap" style={{ marginBottom: '0.25rem' }}>
-                  <span style={{ fontSize: '0.75rem', fontFamily: 'monospace', color: 'var(--purple-400)' }}>{issue['Ticket ID']}</span>
+                  <span style={{ fontSize: '0.8125rem', fontFamily: 'monospace', color: 'var(--purple-400)' }}>{issue['Ticket ID']}</span>
                   <span className={`badge badge-${issue['Flag Level'] === 'Red' ? 'red' : 'yellow'}`} title={getFlagTooltip(issue['Flag Level'])}>{issue['Flag Level']}</span>
                   <span className={`badge ${issue.Type === 'Issue' ? 'badge-red' : 'badge-blue'}`}>{issue.Type}</span>
-                  <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginLeft: 'auto' }}>{formatShortDate(issue['Date Raised'])}</span>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginLeft: 'auto' }}>{formatShortDate(issue['Date Raised'])}</span>
                 </div>
-                <p style={{ fontSize: '1rem', fontWeight: 600 }}>{issue['Employee Name']}</p>
-                <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '0.375rem', lineHeight: 1.4 }}>{issue.Description}</p>
+                <p style={{ fontSize: '0.9375rem', fontWeight: 600 }}>{issue['Employee Name']}</p>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '0.375rem', lineHeight: 1.5 }}>{issue.Description}</p>
               </div>
               <div className="flex-gap">
                 {issue.Status !== 'Resolved' ? (
@@ -156,7 +156,7 @@ function Dashboard({ issues, onStatusChange, onResolve }) {
                     <button className="btn btn-xs" style={{ background: 'rgba(52,211,153,0.2)', color: 'var(--emerald-400)' }} onClick={() => { setResolveModal(issue); setResolveNotes(''); }}>✅ Resolve</button>
                   </>
                 ) : (
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{issue['Resolution Notes'] || 'Resolved'}</span>
+                  <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>{issue['Resolution Notes'] || 'Resolved'}</span>
                 )}
               </div>
             </div>
@@ -170,7 +170,7 @@ function Dashboard({ issues, onStatusChange, onResolve }) {
           <div className="modal-box" onClick={e => e.stopPropagation()}>
             <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--emerald-400)', marginBottom: '1rem' }}>✅ Resolve: {resolveModal['Ticket ID']}</h3>
             <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>{resolveModal['Employee Name']}</p>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>{resolveModal.Description}</p>
+            <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>{resolveModal.Description}</p>
             <label className="label">Resolution Notes *</label>
             <textarea className="g-input" rows={3} value={resolveNotes} onChange={e => setResolveNotes(e.target.value)} placeholder="How was this resolved?" />
             <div className="flex-gap" style={{ marginTop: '1rem' }}>
@@ -236,7 +236,7 @@ function EmployeeSearchDropdown({ employees, selected, onSelect, onClear }) {
         <label className="label">Search Employee *</label>
         <div className="g-input" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
           <span style={{ fontWeight: 500 }}>{selected.name}</span>
-          <button type="button" onClick={handleClear} style={{ background: 'none', border: 'none', color: 'var(--red-400)', cursor: 'pointer', fontSize: '0.875rem', padding: '0 0.25rem' }}>✕</button>
+          <button type="button" onClick={handleClear} style={{ background: 'none', border: 'none', color: 'var(--red-400)', cursor: 'pointer', fontSize: '0.9375rem', padding: '0 0.25rem' }}>✕</button>
         </div>
       </div>
     );
@@ -259,7 +259,7 @@ function EmployeeSearchDropdown({ employees, selected, onSelect, onClear }) {
           onClick={() => setIsOpen(!isOpen)}
           style={{
             position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)',
-            cursor: 'pointer', color: 'var(--text-muted)', fontSize: '0.7rem', userSelect: 'none'
+            cursor: 'pointer', color: 'var(--text-muted)', fontSize: '0.75rem', userSelect: 'none'
           }}
         >{isOpen ? '▲' : '▼'}</span>
       </div>
@@ -271,11 +271,11 @@ function EmployeeSearchDropdown({ employees, selected, onSelect, onClear }) {
           borderRadius: '0.75rem', marginTop: '0.25rem',
           boxShadow: '0 10px 40px rgba(0,0,0,0.5)'
         }}>
-          <div style={{ padding: '0.5rem 1rem', borderBottom: '1px solid rgba(255,255,255,0.08)', fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+          <div style={{ padding: '0.5rem 1rem', borderBottom: '1px solid rgba(255,255,255,0.08)', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
             {filtered.length} employee{filtered.length !== 1 ? 's' : ''} {query ? 'matching' : 'available'}
           </div>
           {filtered.length === 0 && (
-            <div style={{ padding: '0.75rem 1rem', color: 'var(--text-muted)', fontSize: '0.8rem' }}>No matches found</div>
+            <div style={{ padding: '0.75rem 1rem', color: 'var(--text-muted)', fontSize: '0.8125rem' }}>No matches found</div>
           )}
           {filtered.map(emp => (
             <div
@@ -290,7 +290,7 @@ function EmployeeSearchDropdown({ employees, selected, onSelect, onClear }) {
               onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
             >
               <p style={{ fontSize: '0.875rem', fontWeight: 500, color: '#fff' }}>{emp.name}</p>
-              <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.125rem' }}>{emp.screeningID} • {emp.designation}</p>
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.125rem' }}>{emp.screeningID} • {emp.designation}</p>
             </div>
           ))}
         </div>
@@ -303,7 +303,7 @@ function EmployeeSearchDropdown({ employees, selected, onSelect, onClear }) {
 function EmployeeInfo({ data }) {
   return (
     <div className="grid-4">
-      <div><label className="label">Screening ID</label><p className="info-value" style={{ fontFamily: 'monospace', color: 'var(--purple-400)', fontSize: '0.8rem' }}>{data.screeningID || '—'}</p></div>
+      <div><label className="label">Screening ID</label><p className="info-value" style={{ fontFamily: 'monospace', color: 'var(--purple-400)', fontSize: '0.8125rem' }}>{data.screeningID || '—'}</p></div>
       <div><label className="label">Name</label><p className="info-value">{data.name || '—'}</p></div>
       <div><label className="label">Designation</label><p className="info-value">{data.designation || '—'}</p></div>
       <div><label className="label">DOJ</label><p className="info-value">{formatDOJ(data.doj)}</p></div>
@@ -428,7 +428,7 @@ function IssueTracker({ issues, onStatusChange, onResolve }) {
   return (
     <div className="space-y">
       <div className="flex-gap">
-        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Filter:</span>
+        <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 500 }}>Filter:</span>
         {['', 'Open', 'In Progress', 'Resolved'].map(s => (
           <button key={s} className={`pill ${statusFilter === s ? 'active' : ''}`} onClick={() => setStatusFilter(s)}>{s || 'All'}</button>
         ))}
@@ -449,14 +449,14 @@ function IssueTracker({ issues, onStatusChange, onResolve }) {
             {filtered.map(issue => (
               <tr key={issue['Ticket ID']}>
                 <td>
-                  <span style={{ fontFamily: 'monospace', color: 'var(--purple-400)', fontSize: '0.75rem' }}>{issue['Ticket ID']}</span><br />
-                  <span style={{ fontSize: '0.625rem', color: 'var(--text-muted)' }}>{formatShortDate(issue['Date Raised'])}</span>
+                  <span style={{ fontFamily: 'monospace', color: 'var(--purple-400)', fontSize: '0.8125rem' }}>{issue['Ticket ID']}</span><br />
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{formatShortDate(issue['Date Raised'])}</span>
                 </td>
-                <td><span style={{ fontSize: '0.75rem' }}>{issue['Employee Name']}</span><br /><span style={{ fontSize: '0.625rem', color: 'var(--text-muted)' }}>{issue['Screening ID']}</span></td>
+                <td><span style={{ fontSize: '0.875rem' }}>{issue['Employee Name']}</span><br /><span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{issue['Screening ID']}</span></td>
                 <td><span className={`badge ${issue.Type === 'Issue' ? 'badge-red' : 'badge-blue'}`}>{issue.Type}</span></td>
-                <td style={{ maxWidth: '200px', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{issue.Description}</td>
+                <td style={{ maxWidth: '240px', fontSize: '0.8125rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>{issue.Description}</td>
                 <td><span className={`badge badge-${issue['Flag Level'] === 'Red' ? 'red' : issue['Flag Level'] === 'Yellow' ? 'yellow' : 'green'}`} title={getFlagTooltip(issue['Flag Level'])}>{issue['Flag Level']}</span></td>
-                <td style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{issue['Action Owner'] || '—'}</td>
+                <td style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>{issue['Action Owner'] || '—'}</td>
                 <td><span className={`badge ${issue.Status === 'Resolved' ? 'badge-green' : issue.Status === 'In Progress' ? 'badge-yellow' : 'badge-orange'}`}>{issue.Status}</span></td>
                 <td>
                   {issue.Status !== 'Resolved' ? (
@@ -464,7 +464,7 @@ function IssueTracker({ issues, onStatusChange, onResolve }) {
                       <button className="btn btn-xs" style={{ background: 'rgba(250,204,21,0.2)', color: 'var(--yellow-400)' }} onClick={() => onStatusChange(issue['Ticket ID'], 'In Progress')}>🔄</button>
                       <button className="btn btn-xs" style={{ background: 'rgba(52,211,153,0.2)', color: 'var(--emerald-400)' }} onClick={() => { setResolveModal(issue); setResolveNotes(''); }}>✅</button>
                     </div>
-                  ) : <span style={{ fontSize: '0.625rem', color: 'var(--text-muted)' }}>{issue['Resolution Notes'] || 'Done'}</span>}
+                  ) : <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{issue['Resolution Notes'] || 'Done'}</span>}
                 </td>
               </tr>
             ))}
@@ -478,7 +478,7 @@ function IssueTracker({ issues, onStatusChange, onResolve }) {
           <div className="modal-box" onClick={e => e.stopPropagation()}>
             <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--emerald-400)', marginBottom: '1rem' }}>✅ Resolve: {resolveModal['Ticket ID']}</h3>
             <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>{resolveModal['Employee Name']}</p>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>{resolveModal.Description}</p>
+            <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>{resolveModal.Description}</p>
             <label className="label">Resolution Notes *</label>
             <textarea className="g-input" rows={3} value={resolveNotes} onChange={e => setResolveNotes(e.target.value)} placeholder="How was this resolved?" />
             <div className="flex-gap" style={{ marginTop: '1rem' }}>
