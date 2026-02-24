@@ -371,7 +371,20 @@ function Week1Form({ employees, onSubmit }) {
               <option value="Day 6">Day 6 — Week 1 Summary</option>
             </select>
           </div>
-          <div><label className="label">Location</label><input className="g-input" value={location} onChange={e => setLocation(e.target.value)} placeholder="KOLKATA, DETROJ..." /></div>
+          <div><label className="label">Location</label>
+            <select className="g-input" value={location} onChange={e => setLocation(e.target.value)}>
+              <option value="">— Select Location —</option>
+              <option value="KOLKATA">Kolkata</option>
+              <option value="MUMBAI">Mumbai</option>
+              <option value="DETROJ">Detroj</option>
+              <option value="DHULAGARH">Dhulagarh</option>
+              <option value="BHUBANESWAR">Bhubaneswar</option>
+              <option value="PUNE">Pune</option>
+              <option value="NOIDA">Noida</option>
+              <option value="KHEDA">Kheda</option>
+              <option value="DANKUNI">Dankuni</option>
+            </select>
+          </div>
         </div>
         <EmployeeInfo data={emp} />
         <div className="grid-2">
