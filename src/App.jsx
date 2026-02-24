@@ -2,6 +2,14 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import './index.css';
 import { getDashboard, submitWeek1, submitWeek234, addIssues, updateStatus } from './api';
 
+// ─── FLAG TOOLTIPS ──────────────────────────────────────────────────
+const FLAG_TOOLTIPS = {
+  Red: '🔴 Critical — Employee cannot perform job / at risk of leaving. Requires immediate HR intervention.',
+  Yellow: '🟡 At-Risk — Productivity blocked or benefits pending. Needs follow-up within 48 hours.',
+  Green: '🟢 Smooth — No issues reported. Onboarding is on track.'
+};
+const getFlagTooltip = (flag) => FLAG_TOOLTIPS[flag] || '';
+
 // ─── FORMAT DOJ HELPER ──────────────────────────────────────────────
 function formatDOJ(raw) {
   if (!raw) return '—';
@@ -119,8 +127,8 @@ function Dashboard({ issues, onStatusChange, onResolve }) {
     <div className="space-y">
       <div className="grid-5">
         <div className="glass stat-card hover-card" style={{ cursor: 'pointer', border: activeFilter === 'Total Tickets' ? '1px solid var(--purple-400)' : '' }} onClick={() => setActiveFilter(activeFilter === 'Total Tickets' ? 'Needs Attention' : 'Total Tickets')}><p className="stat-value">{issues.length}</p><p className="stat-label">Total Tickets</p></div>
-        <div className="glass stat-card hover-card" style={{ cursor: 'pointer', border: activeFilter === 'Red' ? '1px solid var(--red-400)' : '' }} onClick={() => setActiveFilter(activeFilter === 'Red' ? 'Needs Attention' : 'Red')}><p className="stat-value" style={{ color: 'var(--red-400)' }}>{issues.filter(i => i['Flag Level'] === 'Red').length}</p><p className="stat-label">🔴 Red</p></div>
-        <div className="glass stat-card hover-card" style={{ cursor: 'pointer', border: activeFilter === 'Yellow' ? '1px solid var(--yellow-400)' : '' }} onClick={() => setActiveFilter(activeFilter === 'Yellow' ? 'Needs Attention' : 'Yellow')}><p className="stat-value" style={{ color: 'var(--yellow-400)' }}>{issues.filter(i => i['Flag Level'] === 'Yellow').length}</p><p className="stat-label">🟡 Yellow</p></div>
+        <div className="glass stat-card hover-card" title={FLAG_TOOLTIPS.Red} style={{ cursor: 'pointer', border: activeFilter === 'Red' ? '1px solid var(--red-400)' : '' }} onClick={() => setActiveFilter(activeFilter === 'Red' ? 'Needs Attention' : 'Red')}><p className="stat-value" style={{ color: 'var(--red-400)' }}>{issues.filter(i => i['Flag Level'] === 'Red').length}</p><p className="stat-label">🔴 Red</p></div>
+        <div className="glass stat-card hover-card" title={FLAG_TOOLTIPS.Yellow} style={{ cursor: 'pointer', border: activeFilter === 'Yellow' ? '1px solid var(--yellow-400)' : '' }} onClick={() => setActiveFilter(activeFilter === 'Yellow' ? 'Needs Attention' : 'Yellow')}><p className="stat-value" style={{ color: 'var(--yellow-400)' }}>{issues.filter(i => i['Flag Level'] === 'Yellow').length}</p><p className="stat-label">🟡 Yellow</p></div>
         <div className="glass stat-card hover-card" style={{ cursor: 'pointer', border: activeFilter === 'Open' ? '1px solid var(--orange-400)' : '' }} onClick={() => setActiveFilter(activeFilter === 'Open' ? 'Needs Attention' : 'Open')}><p className="stat-value" style={{ color: 'var(--orange-400)' }}>{issues.filter(i => i.Status === 'Open').length}</p><p className="stat-label">⏳ Open</p></div>
         <div className="glass stat-card hover-card" style={{ cursor: 'pointer', border: activeFilter === 'Resolved' ? '1px solid var(--emerald-400)' : '' }} onClick={() => setActiveFilter(activeFilter === 'Resolved' ? 'Needs Attention' : 'Resolved')}><p className="stat-value" style={{ color: 'var(--emerald-400)' }}>{issues.filter(i => i.Status === 'Resolved').length}</p><p className="stat-label">✅ Resolved</p></div>
       </div>
@@ -134,7 +142,7 @@ function Dashboard({ issues, onStatusChange, onResolve }) {
               <div style={{ flex: 1, minWidth: '200px' }}>
                 <div className="flex-gap" style={{ marginBottom: '0.25rem' }}>
                   <span style={{ fontSize: '0.75rem', fontFamily: 'monospace', color: 'var(--purple-400)' }}>{issue['Ticket ID']}</span>
-                  <span className={`badge badge-${issue['Flag Level'] === 'Red' ? 'red' : 'yellow'}`}>{issue['Flag Level']}</span>
+                  <span className={`badge badge-${issue['Flag Level'] === 'Red' ? 'red' : 'yellow'}`} title={getFlagTooltip(issue['Flag Level'])}>{issue['Flag Level']}</span>
                   <span className={`badge ${issue.Type === 'Issue' ? 'badge-red' : 'badge-blue'}`}>{issue.Type}</span>
                   <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginLeft: 'auto' }}>{formatShortDate(issue['Date Raised'])}</span>
                 </div>
@@ -447,7 +455,7 @@ function IssueTracker({ issues, onStatusChange, onResolve }) {
                 <td><span style={{ fontSize: '0.75rem' }}>{issue['Employee Name']}</span><br /><span style={{ fontSize: '0.625rem', color: 'var(--text-muted)' }}>{issue['Screening ID']}</span></td>
                 <td><span className={`badge ${issue.Type === 'Issue' ? 'badge-red' : 'badge-blue'}`}>{issue.Type}</span></td>
                 <td style={{ maxWidth: '200px', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{issue.Description}</td>
-                <td><span className={`badge badge-${issue['Flag Level'] === 'Red' ? 'red' : issue['Flag Level'] === 'Yellow' ? 'yellow' : 'green'}`}>{issue['Flag Level']}</span></td>
+                <td><span className={`badge badge-${issue['Flag Level'] === 'Red' ? 'red' : issue['Flag Level'] === 'Yellow' ? 'yellow' : 'green'}`} title={getFlagTooltip(issue['Flag Level'])}>{issue['Flag Level']}</span></td>
                 <td style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{issue['Action Owner'] || '—'}</td>
                 <td><span className={`badge ${issue.Status === 'Resolved' ? 'badge-green' : issue.Status === 'In Progress' ? 'badge-yellow' : 'badge-orange'}`}>{issue.Status}</span></td>
                 <td>
@@ -545,7 +553,7 @@ function RaiseIssue({ employees, onSubmit }) {
               <div>
                 <label className="label label-xs">Flag Level</label>
                 <select className="g-input" value={row.flagLevel} onChange={e => updateRow(idx, 'flagLevel', e.target.value)}>
-                  <option value="Red">🔴 Red</option><option value="Yellow">🟡 Yellow</option><option value="Green">🟢 Green</option>
+                  <option value="Red" title={FLAG_TOOLTIPS.Red}>🔴 Red — Critical</option><option value="Yellow" title={FLAG_TOOLTIPS.Yellow}>🟡 Yellow — At-Risk</option><option value="Green" title={FLAG_TOOLTIPS.Green}>🟢 Green — Smooth</option>
                 </select>
               </div>
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'end' }}>
