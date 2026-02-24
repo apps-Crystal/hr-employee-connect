@@ -92,11 +92,11 @@ export default function App() {
       {loading && <div className="flex-center" style={{ flex: 1 }}><div className="spinner" /></div>}
 
       {/* Pages */}
-      {!loading && page === 'dashboard' && <Dashboard issues={issues} onStatusChange={async (tid, st) => { await updateStatus(tid, st, ''); showToast(`🔄 ${tid} → ${st}`); loadAll(); }} onResolve={(tid, notes) => updateStatus(tid, 'Resolved', notes).then(() => { showToast(`✅ ${tid} Resolved!`); loadAll(); })} />}
+      {!loading && page === 'dashboard' && <Dashboard issues={issues} onStatusChange={async (tid, st) => { await updateStatus(tid, st, ''); showToast(`🔄 ${tid} → ${st}`); loadAll(false); }} onResolve={(tid, notes) => updateStatus(tid, 'Resolved', notes).then(() => { showToast(`✅ ${tid} Resolved!`); loadAll(false); })} />}
       {!loading && page === 'week1' && <Week1Form employees={employees} onSubmit={async (d) => { await submitWeek1(d); showToast('✅ Week 1 response saved!'); }} />}
       {!loading && page === 'week234' && <Week234Form employees={employees} onSubmit={async (d) => { await submitWeek234(d); showToast('✅ Week 2-4 response saved!'); }} />}
-      {!loading && page === 'tracker' && <IssueTracker issues={issues} onStatusChange={async (tid, st) => { await updateStatus(tid, st, ''); showToast(`🔄 ${tid} → ${st}`); loadAll(); }} onResolve={(tid, notes) => updateStatus(tid, 'Resolved', notes).then(() => { showToast(`✅ ${tid} Resolved!`); loadAll(); })} />}
-      {!loading && page === 'raise' && <RaiseIssue employees={employees} onSubmit={async (data) => { const res = await addIssues(data); showToast(`🎫 ${res.count} ticket(s) created: ${res.ticketIDs.join(', ')}`); loadAll(); }} />}
+      {!loading && page === 'tracker' && <IssueTracker issues={issues} onStatusChange={async (tid, st) => { await updateStatus(tid, st, ''); showToast(`🔄 ${tid} → ${st}`); loadAll(false); }} onResolve={(tid, notes) => updateStatus(tid, 'Resolved', notes).then(() => { showToast(`✅ ${tid} Resolved!`); loadAll(false); })} />}
+      {!loading && page === 'raise' && <RaiseIssue employees={employees} onSubmit={async (data) => { const res = await addIssues(data); showToast(`🎫 ${res.count} ticket(s) created: ${res.ticketIDs.join(', ')}`); loadAll(false); }} />}
 
       {/* Toast */}
       {toast && <div className="toast">{toast}</div>}
