@@ -220,6 +220,12 @@ textarea.g-input {
   gap: 1rem;
 }
 
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.75rem;
+}
+
 .flex-between {
   display: flex;
   justify-content: space-between;
@@ -247,12 +253,28 @@ textarea.g-input {
   margin-top: 0.75rem;
 }
 
+@media (max-width: 1024px) {
+  .stat-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
 
   .grid-2,
   .grid-3,
   .grid-4,
   .grid-5 {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .stat-grid {
     grid-template-columns: 1fr;
   }
 }

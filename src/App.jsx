@@ -126,8 +126,9 @@ function Dashboard({ issues, onStatusChange, onResolve }) {
     let result;
     switch (activeFilter) {
       case 'Total Tickets': result = issues; break;
-      case 'Red': result = issues.filter(i => i['Flag Level'] === 'Red'); break;
-      case 'Yellow': result = issues.filter(i => i['Flag Level'] === 'Yellow'); break;
+      case 'Red': result = issues.filter(i => i['Flag Level'] === 'Red' && i.Status !== 'Resolved'); break;
+      case 'Orange': result = issues.filter(i => i['Flag Level'] === 'Orange' && i.Status !== 'Resolved'); break;
+      case 'Yellow': result = issues.filter(i => i['Flag Level'] === 'Yellow' && i.Status !== 'Resolved'); break;
       case 'Open': result = issues.filter(i => i.Status === 'Open'); break;
       case 'Resolved': result = issues.filter(i => i.Status === 'Resolved'); break;
       default: result = issues.filter(i => i.Status !== 'Resolved');
@@ -139,10 +140,11 @@ function Dashboard({ issues, onStatusChange, onResolve }) {
 
   return (
     <div className="space-y">
-      <div className="grid-5">
+      <div className="stat-grid">
         <div className="glass stat-card hover-card" style={{ cursor: 'pointer', border: activeFilter === 'Total Tickets' ? '1px solid var(--purple-400)' : '' }} onClick={() => setActiveFilter(activeFilter === 'Total Tickets' ? 'Needs Attention' : 'Total Tickets')}><p className="stat-value">{issues.length}</p><p className="stat-label">Total Tickets</p></div>
-        <div className="glass stat-card hover-card" title={FLAG_TOOLTIPS.Red} style={{ cursor: 'pointer', border: activeFilter === 'Red' ? '1px solid var(--red-400)' : '' }} onClick={() => setActiveFilter(activeFilter === 'Red' ? 'Needs Attention' : 'Red')}><p className="stat-value" style={{ color: 'var(--red-400)' }}>{issues.filter(i => i['Flag Level'] === 'Red').length}</p><p className="stat-label">🔴 Red</p></div>
-        <div className="glass stat-card hover-card" title={FLAG_TOOLTIPS.Yellow} style={{ cursor: 'pointer', border: activeFilter === 'Yellow' ? '1px solid var(--yellow-400)' : '' }} onClick={() => setActiveFilter(activeFilter === 'Yellow' ? 'Needs Attention' : 'Yellow')}><p className="stat-value" style={{ color: 'var(--yellow-400)' }}>{issues.filter(i => i['Flag Level'] === 'Yellow').length}</p><p className="stat-label">🟡 Yellow</p></div>
+        <div className="glass stat-card hover-card" title={FLAG_TOOLTIPS.Red} style={{ cursor: 'pointer', border: activeFilter === 'Red' ? '1px solid var(--red-400)' : '' }} onClick={() => setActiveFilter(activeFilter === 'Red' ? 'Needs Attention' : 'Red')}><p className="stat-value" style={{ color: 'var(--red-400)' }}>{issues.filter(i => i['Flag Level'] === 'Red' && i.Status !== 'Resolved').length}</p><p className="stat-label">🔴 Red</p></div>
+        <div className="glass stat-card hover-card" title={FLAG_TOOLTIPS.Orange} style={{ cursor: 'pointer', border: activeFilter === 'Orange' ? '1px solid var(--orange-400)' : '' }} onClick={() => setActiveFilter(activeFilter === 'Orange' ? 'Needs Attention' : 'Orange')}><p className="stat-value" style={{ color: 'var(--orange-400)' }}>{issues.filter(i => i['Flag Level'] === 'Orange' && i.Status !== 'Resolved').length}</p><p className="stat-label">🟠 Orange</p></div>
+        <div className="glass stat-card hover-card" title={FLAG_TOOLTIPS.Yellow} style={{ cursor: 'pointer', border: activeFilter === 'Yellow' ? '1px solid var(--yellow-400)' : '' }} onClick={() => setActiveFilter(activeFilter === 'Yellow' ? 'Needs Attention' : 'Yellow')}><p className="stat-value" style={{ color: 'var(--yellow-400)' }}>{issues.filter(i => i['Flag Level'] === 'Yellow' && i.Status !== 'Resolved').length}</p><p className="stat-label">🟡 Yellow</p></div>
         <div className="glass stat-card hover-card" style={{ cursor: 'pointer', border: activeFilter === 'Open' ? '1px solid var(--orange-400)' : '' }} onClick={() => setActiveFilter(activeFilter === 'Open' ? 'Needs Attention' : 'Open')}><p className="stat-value" style={{ color: 'var(--orange-400)' }}>{issues.filter(i => i.Status === 'Open').length}</p><p className="stat-label">⏳ Open</p></div>
         <div className="glass stat-card hover-card" style={{ cursor: 'pointer', border: activeFilter === 'Resolved' ? '1px solid var(--emerald-400)' : '' }} onClick={() => setActiveFilter(activeFilter === 'Resolved' ? 'Needs Attention' : 'Resolved')}><p className="stat-value" style={{ color: 'var(--emerald-400)' }}>{issues.filter(i => i.Status === 'Resolved').length}</p><p className="stat-label">✅ Resolved</p></div>
       </div>
